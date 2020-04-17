@@ -3,10 +3,7 @@ package com.phakamanipega.count_my_coffee;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteClosable;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,27 +13,11 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
-
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
-import static java.lang.Integer.valueOf;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingInt;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -93,15 +74,12 @@ public class SecondActivity extends AppCompatActivity {
 
 
     public void populateListView() {
-
                 final Cursor data = mDatabaseHelper.getData();
                 final   ArrayList<String> listData = new ArrayList<>();
                 while (data.moveToNext()) {
 
                                              //"2" is column with dates in DataBaseHelper and 1 is column with values
                  listData.add(data.getString(2 ) + "  $" + data.getString(1));  }
-
-          //VIEW FOR LISTVIEW
                 ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
                 lister.setAdapter(listAdapter);
 

@@ -16,13 +16,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COL1 = "ID";
     public static final String COL2 = "ITEM1";
     public static final String COL3 = "DATE";
+    public static final String COL4 = "ITEM2";
+    public static final String COL5 = "ITEM3";
 
-    public boolean addData(double price, String date ) {
+    public boolean addData(double price1, String date ) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL2, price);
+        contentValues.put(COL2, price1);
         contentValues.put(COL3, date);
+     //   contentValues.put(COL4, price);
+      //  contentValues.put(COL5,price);
         long result = db.insert(TABLE_NAME, null, contentValues);
 
         if (result == -1) {
@@ -35,8 +39,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable =
-      "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + "ITEM1 TEXT, DATE TEXT)";
+        String createTable =                                                                         //, ITEM2 TEXT, ITEM3 TEXT
+      "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + "ITEM1 TEXT, DATE TEXT                        )";
       db.execSQL(createTable);
 
     }
@@ -60,7 +64,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public void deleteName(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();                        //COL3
         String query = "DELETE FROM " + TABLE_NAME + " WHERE " + COL2 + " = '" + name + "'";
 
         Log.d(TAG, "deleteName: query: " + query);
