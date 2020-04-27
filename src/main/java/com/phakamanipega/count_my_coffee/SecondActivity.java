@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,13 +23,13 @@ import java.util.TreeMap;
 
 public class SecondActivity extends AppCompatActivity {
 
-    public Button BACK,SHOW;
+    public Button BACK, GOTOSETTINGS;
     public TextView THISWEEK, THISMONTH, THISYEAR;
     public ListView lister;
     public static final String TAG = "SecondActivity";
     DataBaseHelper mDatabaseHelper;
     DecimalFormat money = new DecimalFormat("0.00 ");
-
+    ListAdapter listAdapter;
 
 
     @Override
@@ -39,91 +41,124 @@ public class SecondActivity extends AppCompatActivity {
         THISWEEK = (TextView) findViewById(R.id.thisweekview);
         THISMONTH = (TextView) findViewById(R.id.thismonthview);
         THISYEAR = (TextView) findViewById(R.id.thisyeaview);
-        SHOW = (Button) findViewById(R.id.Clickviewer);
+        GOTOSETTINGS = (Button) findViewById(R.id.Clickviewer);
         BACK = (Button) findViewById(R.id.back);
-        lister = (ListView)findViewById(R.id.list) ;
+
+        lister = (ListView) findViewById(R.id.list);
         mDatabaseHelper = new DataBaseHelper(this);
+        populateListView();
 
 
 
-       //Button to go back to homeScreen
+
+        //Button to go back to homeScreen
         BACK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent goToMainActivity = new Intent(SecondActivity.this, MainActivity.class);
-                startActivity(goToMainActivity); }
+                startActivity(goToMainActivity);
+            }
+        });
+
+        GOTOSETTINGS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gotosetttings = (new Intent(SecondActivity.this, ThirdActivity.class));
+                startActivity(gotosetttings);
+            }
         });
 
 
 
-        //Button processes "populateListView.class and prints to the textviews
-        SHOW.setOnClickListener(new AdapterView.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                populateListView() ;
 
-        }});
+
+
 
 
 
     }
 
 
-
-
-
-
     public void populateListView() {
-                final Cursor data = mDatabaseHelper.getData();
-                final   ArrayList<String> listData = new ArrayList<>();
-                while (data.moveToNext()) {
+        final Cursor data = mDatabaseHelper.getData();
+        final ArrayList<String> listData = new ArrayList<>();
+        while (data.moveToNext()) {
 
-                                             //"2" is column with dates in DataBaseHelper and 1 is column with values
-                 listData.add(data.getString(2 ) + "  $" + data.getString(1));  }
-                ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
-                lister.setAdapter(listAdapter);
+            //"2" is column with dates in DataBaseHelper and 1 is column with values
+            final String mydataAndDate = data.getString(2) + data.getString(1);
+            final String mydataPrice = data.getString(1)   ;
+            listData.add(mydataPrice);
 
 
-          //Alows you to click item from listView and delete it
-                lister.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //listData.add(data.getString(2 ) + "  $" + data.getString(1));  }
+            listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
+            lister.setAdapter(listAdapter);
 
-            @Override
-            public void onItemClick(final AdapterView<?> adapterView,  final View view,  final int i, long l) {
-                AlertDialog.Builder adb = new AlertDialog.Builder(SecondActivity.this);
-                adb.setTitle("Delete?");
-                adb.setMessage("Are you sure u want to delete " + listData.get(i));
-                int positionToRemove = i;
-                adb.setNegativeButton("Cancel", null);
-                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String name = adapterView.getItemAtPosition(i).toString();
-                        mDatabaseHelper.deleteName(name);
-                        listData.remove(data);
-                    }
-                });adb.show();
-            }});
+
+            //Alows you to click item from listView and delete it
+            lister.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
 
-       //working with user input value and calender:
+                @Override
+                public void onItemClick(final AdapterView<?> adapterView, View view, final int i, final long l) {
+
+//                    String theonetobeDeleteled = (String )adapterView.getItemAtPosition(i);
+//                    mDatabaseHelper.deleteOne(theonetobeDeleteled);
+//                    Toast.makeText(SecondActivity.this, "jajajajajajaja",Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+
+
+                    AlertDialog.Builder adb = new AlertDialog.Builder(SecondActivity.this);
+                    adb.setTitle("Delete?" );
+                    adb.setMessage("Are you sure u want to delete $" + listData.get(i ) );
+                    final String thisIsNowI = listData.get(i);
+                    final int positionToRemove = i;
+                    adb.setNegativeButton("Cancel", null);
+                    adb.setPositiveButton("Ok", new AlertDialog.OnClickListener()
+                    {
+
+
+                            public void onClick(DialogInterface dialog, int which) {
+                                String name = adapterView.getItemAtPosition(i).toString();
+                                mDatabaseHelper.deleteName( name);
+                                Toast.makeText(SecondActivity.this, name +" Was Deleted",Toast.LENGTH_SHORT).show();
+
+                            }
+
+
+                    });
+                    adb.show();
+
+
+
+                }
+            });
+
+
+            //=================================================
 
             Calendar thisDayNow = Calendar.getInstance();
-            final  ArrayList<String> listDataPrice = new ArrayList<>();
+            final ArrayList<String> listDataPrice = new ArrayList<>();
             final Cursor data2 = mDatabaseHelper.getData();
 
-            while (data2.moveToNext()){
-                listDataPrice.add(data2.getString(1 ));}
+            while (data2.moveToNext()) {
+                listDataPrice.add(data2.getString(1));
+            }
 
 
 
         /* WEEKLY ITERATOR
 
-        Trying to find the sum of input values entered into DataBaseHelper(ListDataPrice.ArrayList) for the week.
-        At the end of every week it will reset to 0.
-
+        =============================================
         */
 
-                                                                    // -1 is to Assign Monday as day 1, not Sunday.
+            // -1 is to Assign Monday as day 1, not Sunday.
             int currentDayOfWeek =  thisDayNow.get(Calendar.DAY_OF_WEEK  ) -1 ;
             int lastDAYOFWEEK = 6;
 
@@ -134,7 +169,7 @@ public class SecondActivity extends AppCompatActivity {
 
                     doubleListweekly[i] = Double.parseDouble(listDataPrice.get(i));
                     sumOfWeek += doubleListweekly[i];
-                    THISWEEK.setText("$" + money.format(sumOfWeek));
+                                             THISWEEK.setText("$" + money.format(sumOfWeek));
 
                 }
              }
@@ -143,16 +178,14 @@ public class SecondActivity extends AppCompatActivity {
 
 
         /*MONTHLY ITERATOR
-        Trying different method i.e TreeMap.subMap to add input values from (currentDay, lastDayOfMonth).
-        At the end of the month, this value resets back to Zero.
-
+        ===========================================
         */
 
-         int currentDayofMonth = thisDayNow.get(Calendar.DAY_OF_MONTH);
-         int lastDayOfMonth = 31;
+            int currentDayofMonth = thisDayNow.get(Calendar.DAY_OF_MONTH);
+            int lastDayOfMonth = 31;
 
 
-           if(currentDayofMonth <= lastDayOfMonth){
+            if (currentDayofMonth <= lastDayOfMonth) {
 
                 double[] doubleListmonthly = new double[listDataPrice.size()];
 
@@ -170,32 +203,40 @@ public class SecondActivity extends AppCompatActivity {
                  }
 
 
-
-             }
+            }
 
 
 
 
         /*YEARLY ITERATOR
-         Yearly amount need to reset at the end of the year. The total for the year will be saved onto a different textview.txt
-
+         ========================================================
         */
 
-        double[] doubleList = new double[listDataPrice.size()];
-        double summm = 0;
+            double[] doubleList = new double[listDataPrice.size()];
+            double summm = 0;
 
-        for (int i = 0; i < listDataPrice.size(); ++i) {
-            doubleList[i] = Double.parseDouble(listDataPrice.get(i));
-            summm += doubleList[i];
+            for (int i = 0; i < listDataPrice.size(); ++i) {
+                doubleList[i] = Double.parseDouble(listDataPrice.get(i));
+                summm += doubleList[i];
 
-            String thisone = String.valueOf(summm );
-            THISYEAR.setText("$" + money.format(summm ));
+                String thisone = String.valueOf(summm);
+                THISYEAR.setText("$" + money.format(summm ));
 
 
+
+
+
+
+            }
 
         }
 
+
+
+
     }
+
+
 
 
 }
