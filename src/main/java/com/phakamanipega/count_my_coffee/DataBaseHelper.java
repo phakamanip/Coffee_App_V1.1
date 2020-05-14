@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -36,7 +38,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public boolean deleteOne(String tobeDeleted){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = " DELETE FROM " + TABLE_NAME + " WHERE " + COL3 +COL2 + " = '"  + tobeDeleted + "'";
+        String query = " DELETE FROM " + TABLE_NAME + " WHERE " + COL2 +" = '"  + tobeDeleted + "'";
 
        Cursor cursor =  db.rawQuery(query,null);
 
@@ -73,13 +75,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public void deleteName(String namethis) {
-        SQLiteDatabase db = this.getWritableDatabase();
-       String query = "DELETE FROM " + TABLE_NAME + " WHERE " + COL2 + " = '"  + namethis + "'" ;
+    public void deleteName(String namethis, String datethis) {
 
-        //Log.d(TAG, "deleteName: query: " + query);
-       // Log.d(TAG, "deleteName: Deleting: " + namethis + " from database.");
-       db.execSQL(query);
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+       String query = "DELETE FROM " + TABLE_NAME + " WHERE " + COL2  + " = '"  + namethis  + "'";
+        String query2 = "DELETE FROM " + TABLE_NAME + " WHERE " + COL3  + " = '"  + datethis  + "'";
+
+
+       Log.d(TAG, "deleteName: query: " + query);
+       Log.d(TAG, "deleteName: Deleting: " + namethis + " from database.");
+       db.execSQL(query );
+       db.execSQL(query2);
+
        db.close();
 
     }

@@ -40,8 +40,8 @@
 
     <ListView
         android:id="@+id/list"
-        android:layout_width="166dp"
-        android:layout_height="494dp"
+        android:layout_width="176dp"
+        android:layout_height="491dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
 
@@ -49,25 +49,12 @@
         android:choiceMode="multipleChoice"
         android:padding="1dp"
         android:saveEnabled="true"
-        android:textSize="5dp"
+        android:textSize="12sp"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/thisweekview"
-        android:layout_width="160dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="3dp"
-        android:background="@drawable/border_style2"
 
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.896"
-        app:layout_constraintStart_toEndOf="@+id/list"
-        app:layout_constraintTop_toBottomOf="@+id/thisweektitle" />
 
     <TextView
         android:id="@+id/thisweektitle"
@@ -120,13 +107,29 @@
         app:layout_constraintTop_toBottomOf="@+id/thismonthview" />
 
     <TextView
+        android:id="@+id/thisweekview"
+        android:layout_width="160dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="3dp"
+        android:background="@drawable/border_style2"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.896"
+        app:layout_constraintStart_toEndOf="@+id/list"
+        app:layout_constraintTop_toBottomOf="@+id/thisweektitle" />
+
+    <TextView
         android:id="@+id/thisyeaview"
         android:layout_width="160dp"
-        android:layout_height="53dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="3dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/border_style4"
+        android:textColor="#CA0953"
         android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/Clickviewer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -138,11 +141,11 @@
     <TextView
         android:id="@+id/thismonthview"
         android:layout_width="160dp"
-        android:layout_height="53dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="3dp"
         android:background="@drawable/border_style3"
-        android:textSize="30dp"
+        android:textSize="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.885"
         app:layout_constraintStart_toEndOf="@+id/list"

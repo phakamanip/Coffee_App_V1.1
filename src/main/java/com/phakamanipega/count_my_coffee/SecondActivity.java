@@ -18,7 +18,8 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class SecondActivity extends AppCompatActivity {
@@ -29,7 +30,9 @@ public class SecondActivity extends AppCompatActivity {
     public static final String TAG = "SecondActivity";
     DataBaseHelper mDatabaseHelper;
     DecimalFormat money = new DecimalFormat("0.00 ");
-    ListAdapter listAdapter;
+    Calendar thisDayNow = Calendar.getInstance();
+    ListAdapter adapter;
+
 
 
     @Override
@@ -38,16 +41,15 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.activity_second);
 
 
+
         THISWEEK = (TextView) findViewById(R.id.thisweekview);
         THISMONTH = (TextView) findViewById(R.id.thismonthview);
         THISYEAR = (TextView) findViewById(R.id.thisyeaview);
         GOTOSETTINGS = (Button) findViewById(R.id.Clickviewer);
         BACK = (Button) findViewById(R.id.back);
-
         lister = (ListView) findViewById(R.id.list);
         mDatabaseHelper = new DataBaseHelper(this);
         populateListView();
-
 
 
 
@@ -69,88 +71,94 @@ public class SecondActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
     }
 
 
     public void populateListView() {
         final Cursor data = mDatabaseHelper.getData();
         final ArrayList<String> listData = new ArrayList<>();
-        while (data.moveToNext()) {
 
-            //"2" is column with dates in DataBaseHelper and 1 is column with values
-            final String mydataAndDate = data.getString(2) + data.getString(1);
-            final String mydataPrice = data.getString(1)   ;
-            listData.add(mydataPrice);
+             while (data.moveToNext()) {
+
+            //                           "2" is column with dates in DataBaseHelper and             1 is column with values
+            final String  mydataAndDate ="$"+data.getString(1) + data.getString(2);
+            final String mydataPrice = data.getString(1);
+            final String mydataDate =  data.getString(2)   ;
+            final String[]  mydataPriceArray = { data.getString(1)  } ;
+
+        listData.add(mydataAndDate );
 
 
-            //listData.add(data.getString(2 ) + "  $" + data.getString(1));  }
-            listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
-            lister.setAdapter(listAdapter);
+               adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,  listData );
+               lister.setAdapter(adapter );
+
+            final ArrayList<String> listDataPrice = new ArrayList<>();
 
 
-            //Alows you to click item from listView and delete it
+
+            //  Alows you to click item from listView and delete it
             lister.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-
-
                 @Override
                 public void onItemClick(final AdapterView<?> adapterView, View view, final int i, final long l) {
 
-//                    String theonetobeDeleteled = (String )adapterView.getItemAtPosition(i);
-//                    mDatabaseHelper.deleteOne(theonetobeDeleteled);
-//                    Toast.makeText(SecondActivity.this, "jajajajajajaja",Toast.LENGTH_SHORT).show();
-
-
-
-
-
-
-
-
                     AlertDialog.Builder adb = new AlertDialog.Builder(SecondActivity.this);
                     adb.setTitle("Delete?" );
+
                     adb.setMessage("Are you sure u want to delete $" + listData.get(i ) );
-                    final String thisIsNowI = listData.get(i);
-                    final int positionToRemove = i;
                     adb.setNegativeButton("Cancel", null);
-                    adb.setPositiveButton("Ok", new AlertDialog.OnClickListener()
-                    {
+                    adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            String listdatastring = listData.get(i);
+
+                            mDatabaseHelper.deleteOne(mydataAndDate);
+                            mDatabaseHelper.deleteOne(listDataPrice.get(i));
+                            //mDatabaseHelper.deleteOne(listData.get(i));
+                            //mDatabaseHelper.deleteOne(mydataPrice);
+
+                            listData.remove(i);
+                            mDatabaseHelper.deleteName(mydataDate, String.valueOf(mydataPrice));
+                            Toast.makeText(SecondActivity.this, listdatastring + " Deleted ",Toast.LENGTH_LONG).show();
+                            populateListView();
 
 
-                            public void onClick(DialogInterface dialog, int which) {
-                                String name = adapterView.getItemAtPosition(i).toString();
-                                mDatabaseHelper.deleteName( name);
-                                Toast.makeText(SecondActivity.this, name +" Was Deleted",Toast.LENGTH_SHORT).show();
-
-                            }
+                        }
+                    }
 
 
-                    });
+                    );
+
+
                     adb.show();
-
-
-
                 }
+
             });
 
 
-            //=================================================
 
-            Calendar thisDayNow = Calendar.getInstance();
-            final ArrayList<String> listDataPrice = new ArrayList<>();
             final Cursor data2 = mDatabaseHelper.getData();
+
 
             while (data2.moveToNext()) {
                 listDataPrice.add(data2.getString(1));
-            }
 
+
+            }
+            //listItemView with 2 views
+            //=================================================
+            HashMap<String, String> listviewPriceAndDate = new HashMap<>();
+            listviewPriceAndDate.put(data.getString(1),data.getString(2));
+            List<HashMap<String, String>> listItems = new ArrayList<>();
+            listItems.add(listviewPriceAndDate);
+
+
+           // ListAdapter zee = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
+           // lister.setAdapter(zee);
+
+            //=================================================
+
+           // listDataPrice.get()
 
 
         /* WEEKLY ITERATOR
@@ -169,36 +177,57 @@ public class SecondActivity extends AppCompatActivity {
 
                     doubleListweekly[i] = Double.parseDouble(listDataPrice.get(i));
                     sumOfWeek += doubleListweekly[i];
-                                             THISWEEK.setText("$" + money.format(sumOfWeek));
+                                          //   THISWEEK.setText("$" + money.format(sumOfWeek));
 
                 }
              }
 
-
-
-
-        /*MONTHLY ITERATOR
-        ===========================================
-        */
+         //=======
 
             int currentDayofMonth = thisDayNow.get(Calendar.DAY_OF_MONTH);
             int lastDayOfMonth = 31;
 
 
-            if (currentDayofMonth <= lastDayOfMonth) {
 
+
+
+       // ===========================================
+         /*MONTHLY ITERATOR
+
+
+            int January = 31;
+            int Febuary = 28;
+            int March = 31;
+            int April = 30 ;
+            int May = 31;
+            int June  = 30;
+            int July = 31;
+            int August = 31;
+            int September  = 30;
+            int October = 31;
+            int November = 30;
+            int December = 31;
+
+            if (currentDayofMonth <= January      || currentDayofMonth <=March
+                    || currentDayofMonth <=May    || currentDayofMonth <=July
+                    || currentDayofMonth <=August || currentDayofMonth <= October
+                    || currentDayofMonth <=December){ }
+
+            if (currentDayofMonth <=April ||currentDayofMonth <=June ||
+                    currentDayofMonth <=September || currentDayofMonth <=November ){ }
+
+          //======
+
+
+            if (currentDayofMonth <= lastDayOfMonth) {
                 double[] doubleListmonthly = new double[listDataPrice.size()];
 
-
-                TreeMap<Integer, double[]> treeMap1 = new TreeMap<>();
+                     TreeMap<Integer, double[]> treeMap1 = new TreeMap<>();
 
                  for(TreeMap.Entry<Integer, double[]> entry: treeMap1.entrySet() ) {
-
                      treeMap1.put(currentDayofMonth, doubleListmonthly);
-
                      treeMap1.subMap(currentDayofMonth, lastDayOfMonth);
-
-                       THISMONTH.setText(treeMap1.toString());
+                     // THISMONTH.setText(treeMap1.toString());
 
                  }
 
@@ -219,8 +248,14 @@ public class SecondActivity extends AppCompatActivity {
                 doubleList[i] = Double.parseDouble(listDataPrice.get(i));
                 summm += doubleList[i];
 
-                String thisone = String.valueOf(summm);
+
+
                 THISYEAR.setText("$" + money.format(summm ));
+
+               // mDatabaseHelper.deleteOne(String.valueOf(summm));
+
+                THISMONTH.setText(listDataPrice.toString());
+                THISWEEK.setText(listData.toString());
 
 
 
@@ -228,6 +263,7 @@ public class SecondActivity extends AppCompatActivity {
 
 
             }
+
 
         }
 
