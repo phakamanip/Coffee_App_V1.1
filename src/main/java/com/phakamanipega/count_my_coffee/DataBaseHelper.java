@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,17 +16,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String TAG = "DatabaseHelper";
     public static final String DATABASE_NAME = "myDB.db";
     public static final String TABLE_NAME = "mylist_data2";
-    public static final String COL1 = "ID";
+    public static final String COL1 = "ITEMWEEK";
     public static final String COL2 = "ITEM1";
     public static final String COL3 = "DATE";
 
 
-    public boolean addData(double price1, String date ) {
+    public boolean addData(double priceweek, double price1, String date ) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COL1, priceweek);
         contentValues.put(COL2, price1);
         contentValues.put(COL3, date);
+
+
         long result = db.insert(TABLE_NAME, null, contentValues);
 
         if (result == -1) {
@@ -66,6 +70,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public DataBaseHelper(Context context) {
         super(context, TABLE_NAME, null, 1);
+
     }
 
     public Cursor getData() {
@@ -75,22 +80,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public void deleteName(String namethis, String datethis) {
 
 
-
+    void weeklymethod(Double thidouble){
         SQLiteDatabase db = this.getWritableDatabase();
-       String query = "DELETE FROM " + TABLE_NAME + " WHERE " + COL2  + " = '"  + namethis  + "'";
-        String query2 = "DELETE FROM " + TABLE_NAME + " WHERE " + COL3  + " = '"  + datethis  + "'";
+        ContentValues cv = new ContentValues();
+        cv.put(COL1,thidouble);
+        Long result = db.insert(TABLE_NAME,null,cv);
+        if (result == -1){
 
-
-       Log.d(TAG, "deleteName: query: " + query);
-       Log.d(TAG, "deleteName: Deleting: " + namethis + " from database.");
-       db.execSQL(query );
-       db.execSQL(query2);
-
-       db.close();
-
+        }
     }
 
 

@@ -49,6 +49,9 @@ public class MainActivity extends Activity {
            requestWindowFeature(Window.FEATURE_NO_TITLE);
            setContentView(R.layout.activity_main);
            setupUIViews();
+           DecimalFormat myDecimalFormater = new DecimalFormat("0.00 ");
+
+           Toast.makeText(this, "Hello, Welcome back :) ",Toast.LENGTH_LONG).show();
 
             mDatabaseHelper = new DataBaseHelper(this);
             num1 = (TextView) findViewById(R.id.etNum1);
@@ -123,25 +126,26 @@ public class MainActivity extends Activity {
             });
 
 
-
         //Button when pay is pressed
         pay.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
+                  // thisismymethod();
 
              try {
-                        //SimpleDateFormat is for parsing and formating dates
+
                         SimpleDateFormat sdf = new SimpleDateFormat(" MM.dd ");
                         DecimalFormat money = new DecimalFormat("0.00 ");
-                    final Double number1 = Double.parseDouble(num1.getText().toString()) / 100.00;
-                    final Double number2 = Double.parseDouble(num2.getText().toString());
-                    final Double sum = number1 + number2;
+                     Double number1 = Double.parseDouble(num1.getText().toString()) / 100.00;
+                     Double number2 = Double.parseDouble(num2.getText().toString());
+                     Double sum = number1 + number2;
 
-                    //TextViews
-                    result.setText(valueOf(sum));
+
+                 //TextViews
+
                     num1.setText(" ");
                     num2.setText(valueOf(sum));
-                    result.setText(money.format(sum));
+                    result.setText(  money.format(sum));
                     mCounter++;
                     cups.setText(Integer.toString(mCounter));
 
@@ -149,7 +153,8 @@ public class MainActivity extends Activity {
                                     Toast.makeText(getBaseContext(), "input field is empty", Toast.LENGTH_LONG).show(); }
 
 
-                          //Assigning variables that will go into SQLite
+                          //Assigning variables that will go into
+                          Double weekEntry = Double.parseDouble(num2.getText().toString());
                            Double newEntry = Double.parseDouble(num2.getText().toString());
                            String dateForSql = sdf.format(new Date());
 
@@ -159,25 +164,47 @@ public class MainActivity extends Activity {
 
                     //Adding the values onto SQLite through AddData.class
                    if (num2.length() != 0 || dateForSql != null) {
-                        AddData(newEntry, dateForSql);
+                        AddData(weekEntry, newEntry, dateForSql);
                         num1.setText(" ");
                         Toast.makeText(MainActivity.this, "SAVED !!!", Toast.LENGTH_SHORT).show();
                    }
+
 
             } catch(Exception e)
            { Toast.makeText(MainActivity.this, "No Amount Inserted", Toast.LENGTH_SHORT).show();}
 
 
 
+
+
         }});
+
 
         //Button to open LOG page/Activity
         logpage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    Intent pacman = new Intent(MainActivity.this, SecondActivity.class);
-                    startActivity(pacman);
-        }});
+                        Double number1 =  Double.parseDouble(num2.getText().toString());
+                        Double sum = number1 ;
+
+
+                        String sumerizedstring = String.valueOf(sum);
+
+                        Intent intent = new Intent(MainActivity.this,SecondActivity.class);
+                        intent.putExtra("zuma",sumerizedstring );
+                        startActivity(intent);
+
+
+
+//                    Intent pacman = new Intent(MainActivity.this, SecondActivity.class);
+//
+//
+//                    startActivity(pacman);
+//
+
+
+
+                    }});
 
         //Button to open SETTINGS page
         thirdactivity.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +214,20 @@ public class MainActivity extends Activity {
                 startActivity(SETTINGSPAGE);
 
         }});
+
+    }
+
+    public void thisismymethod(){
+         Double number1 = 1.4;
+         Double number2 = 0.4;
+         Double sum = number1 + number2;
+
+                String sumerizedstring = String.valueOf(sum);
+
+                 Intent intent = new Intent(MainActivity.this,SecondActivity.class);
+                  intent.putExtra("zuma",sum );
+                 startActivity(intent);
+
 
     }
 
@@ -207,15 +248,21 @@ public class MainActivity extends Activity {
 
     }
 
-    public void AddData(Double newEntry, String dateForSql){
+    public void AddData(Double weekEntry, Double newEntry, String dateForSql){
 
 
-            boolean insertData = mDatabaseHelper.addData(newEntry , dateForSql );
+            boolean insertData = mDatabaseHelper.addData(weekEntry, newEntry , dateForSql );
 
                 if(insertData == true)  {
                 num1.setText(valueOf(result));
                 Toast.makeText(MainActivity.this, "SAVED ", Toast.LENGTH_SHORT).show();}
                 else { Toast.makeText(MainActivity.this, "NOT SAVED", Toast.LENGTH_SHORT).show(); }
+
+    }
+
+    public void justlaugh(){
+        String look = " hahahahahahahahah";
+
 
     }
 

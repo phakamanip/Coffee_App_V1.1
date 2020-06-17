@@ -29,10 +29,11 @@ public class ThirdActivity extends AppCompatActivity {
         Screen = (TextView) findViewById(R.id.message);
 
 
-        String  thankyou = " Thanks for using our App. \n        " +
-                "Keep checking here for update.     \n   " +
-                " Send comments and suggestions on what u want added to future updates to      \n" +
-                "  myCoffeeApp@gmail.com Thank you";
+        String  thankyou = "Thanks for using our App. \n" +
+                "Keep checking here for update.     \n" +
+                "Send comments and suggestions on what u want to see added in future updates to      \n" +
+                "myCoffeeApp@gmail.com\n"+ "\n"+
+                "Thank you";
 
         Screen.setText(thankyou);
 
