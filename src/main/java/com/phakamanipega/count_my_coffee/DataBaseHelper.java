@@ -5,10 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -19,16 +15,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COL1 = "ITEMWEEK";
     public static final String COL2 = "ITEM1";
     public static final String COL3 = "DATE";
+    public static final String COL4 = "ITEMWEEK";
 
 
-    public boolean addData(double priceweek, double price1, String date ) {
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String createTable =
+      "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT " +
+                             " , ITEM1 TEXT " +
+                             " , DATE TEXT " +
+                             " , ITEMWEEK TEXT" + ")";
+        db.execSQL(createTable);
+
+    }
+
+    public boolean addData(int weekDayInt, double price1, String date ) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL1, priceweek);
+        contentValues.put(COL4, weekDayInt);
         contentValues.put(COL2, price1);
         contentValues.put(COL3, date);
-
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
@@ -42,7 +49,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public boolean deleteOne(String tobeDeleted){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = " DELETE FROM " + TABLE_NAME + " WHERE " + COL2 +" = '"  + tobeDeleted + "'";
+        String query = " DELETE FROM mylist_data2 " + " WHERE " + COL2 +" = '"  + tobeDeleted + "'";
 
        Cursor cursor =  db.rawQuery(query,null);
 
@@ -53,13 +60,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
        }
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String createTable =
-      "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + "ITEM1 TEXT, DATE TEXT )";
-      db.execSQL(createTable);
 
-    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
@@ -69,7 +70,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public DataBaseHelper(Context context) {
-        super(context, TABLE_NAME, null, 1);
+        super(context, TABLE_NAME, null, 2);
 
     }
 
@@ -82,25 +83,43 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
 
-    void weeklymethod(Double thidouble){
+    public Cursor retrieveOnWeekDay(int WeekTotal){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(COL1,thidouble);
-        Long result = db.insert(TABLE_NAME,null,cv);
-        if (result == -1){
 
-        }
+        int monday = 1;
+        int tuesday = 2;
+        int wednesday = 3;
+        int thursday = 4;
+        int friday = 5;
+        int saturday= 6;
+        int sunday = 7;
+
+        //String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL4 + " = '" + sunday +" '";
+
+
+        String query2 = "SELECT * FROM " + TABLE_NAME + " WHERE " + WeekTotal ;
+
+
+        Cursor data = db.rawQuery(query2, null);
+      //  db.execSQL(query2);
+
+        return data;
+
+
     }
 
 
 
-
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+

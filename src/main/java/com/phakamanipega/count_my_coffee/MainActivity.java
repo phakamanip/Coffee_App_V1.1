@@ -40,6 +40,8 @@ public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
 
     DataBaseHelper mDatabaseHelper;
+    DecimalFormat myDecimalFormater = new DecimalFormat("0.00 ");
+
 
 
 
@@ -48,19 +50,12 @@ public class MainActivity extends Activity {
           super.onCreate(savedInstanceState);
            requestWindowFeature(Window.FEATURE_NO_TITLE);
            setContentView(R.layout.activity_main);
+           Toast.makeText(this, "Hello, Welcome back :) " ,Toast.LENGTH_LONG).show();
+
            setupUIViews();
-           DecimalFormat myDecimalFormater = new DecimalFormat("0.00 ");
 
-           Toast.makeText(this, "Hello, Welcome back :) ",Toast.LENGTH_LONG).show();
 
-            mDatabaseHelper = new DataBaseHelper(this);
-            num1 = (TextView) findViewById(R.id.etNum1);
-            num2 = (EditText) findViewById(R.id.etNum2);
-            pay = (Button) findViewById(R.id.btnAdd);
-            result = (TextView) findViewById(R.id.tvAnswer);
-            cups = (TextView) findViewById(R.id.textView6);
-            logpage = (Button) findViewById(R.id.logpage);
-            thirdactivity = (Button) findViewById(R.id.settings);
+
 
 
 
@@ -135,6 +130,7 @@ public class MainActivity extends Activity {
              try {
 
                         SimpleDateFormat sdf = new SimpleDateFormat(" MM.dd ");
+                 SimpleDateFormat sdf2 = new SimpleDateFormat("u");
                         DecimalFormat money = new DecimalFormat("0.00 ");
                      Double number1 = Double.parseDouble(num1.getText().toString()) / 100.00;
                      Double number2 = Double.parseDouble(num2.getText().toString());
@@ -153,8 +149,10 @@ public class MainActivity extends Activity {
                                     Toast.makeText(getBaseContext(), "input field is empty", Toast.LENGTH_LONG).show(); }
 
 
-                          //Assigning variables that will go into
-                          Double weekEntry = Double.parseDouble(num2.getText().toString());
+                          //Assigning variables that will go into sqlite
+                           String weekdayString = sdf2.format(new Date());
+                              int weekDayInt = Integer.parseInt(weekdayString);
+                           Double weekEntry = Double.parseDouble(num2.getText().toString());
                            Double newEntry = Double.parseDouble(num2.getText().toString());
                            String dateForSql = sdf.format(new Date());
 
@@ -164,8 +162,8 @@ public class MainActivity extends Activity {
 
                     //Adding the values onto SQLite through AddData.class
                    if (num2.length() != 0 || dateForSql != null) {
-                        AddData(weekEntry, newEntry, dateForSql);
-                        num1.setText(" ");
+                        AddData(weekDayInt, newEntry, dateForSql);
+                        num1.setText(" " );
                         Toast.makeText(MainActivity.this, "SAVED !!!", Toast.LENGTH_SHORT).show();
                    }
 
@@ -246,25 +244,30 @@ public class MainActivity extends Activity {
         nine = (Button) findViewById(R.id.button9);
         clear = (Button) findViewById(R.id.button11);
 
+
+        mDatabaseHelper = new DataBaseHelper(this);
+        num1 = (TextView) findViewById(R.id.etNum1);
+        num2 = (EditText) findViewById(R.id.etNum2);
+        pay = (Button) findViewById(R.id.btnAdd);
+        result = (TextView) findViewById(R.id.tvAnswer);
+        cups = (TextView) findViewById(R.id.textView6);
+        logpage = (Button) findViewById(R.id.logpage);
+        thirdactivity = (Button) findViewById(R.id.settings);
+
     }
 
-    public void AddData(Double weekEntry, Double newEntry, String dateForSql){
+    public void AddData(int weekDayInt, Double newEntry, String dateForSql){
 
 
-            boolean insertData = mDatabaseHelper.addData(weekEntry, newEntry , dateForSql );
+            boolean insertData = mDatabaseHelper.addData(weekDayInt, newEntry , dateForSql );
 
                 if(insertData == true)  {
-                num1.setText(valueOf(result));
-                Toast.makeText(MainActivity.this, "SAVED ", Toast.LENGTH_SHORT).show();}
+                        num1.setText(valueOf(result));
+                        Toast.makeText(MainActivity.this, "SAVED ", Toast.LENGTH_SHORT).show();}
                 else { Toast.makeText(MainActivity.this, "NOT SAVED", Toast.LENGTH_SHORT).show(); }
 
     }
 
-    public void justlaugh(){
-        String look = " hahahahahahahahah";
-
-
-    }
 
 
 
