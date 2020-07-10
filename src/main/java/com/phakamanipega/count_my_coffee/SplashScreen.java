@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class SplashScreen extends AppCompatActivity {
 
 
-    private static int SPLASH_TIME_OUT = 500;
+    private static int SPLASH_TIME_OUT = 3000;
 
 
     ImageView imageView;

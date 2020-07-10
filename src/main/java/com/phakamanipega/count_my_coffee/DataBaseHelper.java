@@ -6,36 +6,41 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "DatabaseHelper";
     public static final String DATABASE_NAME = "myDB.db";
     public static final String TABLE_NAME = "mylist_data2";
-    public static final String COL1 = "ITEMWEEK";
     public static final String COL2 = "ITEM1";
     public static final String COL3 = "DATE";
-    public static final String COL4 = "ITEMWEEK";
+    public static final String COL4 = "ITEMDAY";
+    public static final String COL5 = "ITEMMONTH";
+    public static final String COL6 = "ITEMWEEK";
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable =
-      "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT " +
-                             " , ITEM1 TEXT " +
-                             " , DATE TEXT " +
-                             " , ITEMWEEK TEXT" + ")";
+  String createTable =
+    "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT " +
+            " , ITEM1 TEXT " + " , DATE TEXT " +" , ITEMDAY TEXT " + " , ITEMWEEK TEXT "  + " , ITEMMONTH TEXT) ";
         db.execSQL(createTable);
 
     }
 
-    public boolean addData(int weekDayInt, double price1, String date ) {
+    public boolean addData(int weekDayInt, int weekInt, int monthInt, double price1, String date ) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL4, weekDayInt);
+        contentValues.put(COL6, weekInt );
+        contentValues.put(COL5, monthInt );
         contentValues.put(COL2, price1);
         contentValues.put(COL3, date);
+
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
@@ -70,7 +75,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public DataBaseHelper(Context context) {
-        super(context, TABLE_NAME, null, 2);
+        super(context, TABLE_NAME, null, 5);
 
     }
 
@@ -82,31 +87,40 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor weekDayCalculation(){
+        SimpleDateFormat sdf = new SimpleDateFormat( "u" );
+        int currentWeekInt = Integer.parseInt( sdf.format( new Date(  ) ) ) ;
+       SQLiteDatabase db = this.getWritableDatabase();
+       String Query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL4 +" = '" + currentWeekInt +"' ";
+       Cursor data = db.rawQuery( Query,null );
 
-    public Cursor retrieveOnWeekDay(int WeekTotal){
+
+
+       return data;
+    }
+
+    public Cursor weekmonthCalculation(){
+        SimpleDateFormat sdf = new SimpleDateFormat( "w" );
+        int currentWeekMonth = Integer.parseInt( sdf.format( new Date ()) );
         SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL6 +" = '" + currentWeekMonth +"' ";
+        Cursor data = db.rawQuery( Query, null );
+        return data;
+    }
 
-        int monday = 1;
-        int tuesday = 2;
-        int wednesday = 3;
-        int thursday = 4;
-        int friday = 5;
-        int saturday= 6;
-        int sunday = 7;
-
-        //String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL4 + " = '" + sunday +" '";
-
-
-        String query2 = "SELECT * FROM " + TABLE_NAME + " WHERE " + WeekTotal ;
-
-
-        Cursor data = db.rawQuery(query2, null);
-      //  db.execSQL(query2);
+    public Cursor monthCalculation(){
+        SimpleDateFormat sdf = new SimpleDateFormat( "L" );
+        int monthInt = Integer.parseInt(sdf.format( new Date()));
+        SQLiteDatabase db = this.getWritableDatabase();
+        String Query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL5 + " = '" + monthInt + "' ";
+        Cursor data = db.rawQuery( Query, null );
 
         return data;
-
-
     }
+
+
+
+
 
 
 

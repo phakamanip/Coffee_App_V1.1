@@ -10,28 +10,28 @@
         android:id="@+id/done"
         android:layout_width="309dp"
         android:layout_height="51dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="252dp"
         android:layout_marginEnd="8dp"
-        android:text="Press here to update"
+        android:layout_marginStart="8dp"
+        android:text="Update"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/message2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message"
-        app:layout_constraintVertical_bias="0.594" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/message"
-        android:layout_width="306dp"
-        android:layout_height="195dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="230dp"
+        android:layout_width="339dp"
+        android:layout_height="49dp"
         android:layout_marginEnd="8dp"
-        android:textSize="12sp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:textSize="14sp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.426"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -49,4 +49,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/message2"
+        android:layout_width="344dp"
+        android:layout_height="167dp"
+        android:layout_marginBottom="52dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

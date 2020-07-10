@@ -3,6 +3,7 @@ package com.phakamanipega.count_my_coffee;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -24,7 +25,7 @@ public class MainActivity extends Activity {
     public Button logpage;
     public TextView num1;
     public EditText num2;
-    public Button pay;
+    public Button PAY;
     public TextView result;
     private Button clear;
     private Button zero;
@@ -40,7 +41,6 @@ public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
 
     DataBaseHelper mDatabaseHelper;
-    DecimalFormat myDecimalFormater = new DecimalFormat("0.00 ");
 
 
 
@@ -50,17 +50,10 @@ public class MainActivity extends Activity {
           super.onCreate(savedInstanceState);
            requestWindowFeature(Window.FEATURE_NO_TITLE);
            setContentView(R.layout.activity_main);
-           Toast.makeText(this, "Hello, Welcome back :) " ,Toast.LENGTH_LONG).show();
-
-           setupUIViews();
-
-
-
-
-
-
-
-              zero.setOnClickListener(new View.OnClickListener() {
+           ToastWelcome();
+           SetupUIViews();
+            //UI BUTTONS  0-9... 00
+            zero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     num1.setText(num1.getText().toString() + "0");
@@ -122,15 +115,18 @@ public class MainActivity extends Activity {
 
 
         //Button when pay is pressed
-        pay.setOnClickListener(new View.OnClickListener() {
+        PAY.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-                  // thisismymethod();
+
+
 
              try {
 
                         SimpleDateFormat sdf = new SimpleDateFormat(" MM.dd ");
                  SimpleDateFormat sdf2 = new SimpleDateFormat("u");
+                 SimpleDateFormat sdf3 = new SimpleDateFormat( "L" );
+                 SimpleDateFormat sdf4 = new SimpleDateFormat( "w" );
                         DecimalFormat money = new DecimalFormat("0.00 ");
                      Double number1 = Double.parseDouble(num1.getText().toString()) / 100.00;
                      Double number2 = Double.parseDouble(num2.getText().toString());
@@ -151,7 +147,11 @@ public class MainActivity extends Activity {
 
                           //Assigning variables that will go into sqlite
                            String weekdayString = sdf2.format(new Date());
-                              int weekDayInt = Integer.parseInt(weekdayString);
+                                String monthString = sdf3.format(new Date());
+                                String weekMonthString = sdf4.format(new Date());
+                              int weekDayInt = Integer.parseInt(weekdayString) ;
+                              int monthInt = Integer.parseInt( monthString );
+                              int weekMonth =Integer.parseInt( weekMonthString );
                            Double weekEntry = Double.parseDouble(num2.getText().toString());
                            Double newEntry = Double.parseDouble(num2.getText().toString());
                            String dateForSql = sdf.format(new Date());
@@ -162,20 +162,25 @@ public class MainActivity extends Activity {
 
                     //Adding the values onto SQLite through AddData.class
                    if (num2.length() != 0 || dateForSql != null) {
-                        AddData(weekDayInt, newEntry, dateForSql);
+                        AddData(weekDayInt, weekMonth, monthInt, newEntry, dateForSql);
                         num1.setText(" " );
-                        Toast.makeText(MainActivity.this, "SAVED !!!", Toast.LENGTH_SHORT).show();
+                        ToastSaved();
                    }
 
 
-            } catch(Exception e)
-           { Toast.makeText(MainActivity.this, "No Amount Inserted", Toast.LENGTH_SHORT).show();}
+
+
+
+             } catch(Exception e)
+           { ToastNoAmountInserted();
+           }
 
 
 
 
 
         }});
+
 
 
         //Button to open LOG page/Activity
@@ -215,23 +220,31 @@ public class MainActivity extends Activity {
 
     }
 
-    public void thisismymethod(){
-         Double number1 = 1.4;
-         Double number2 = 0.4;
-         Double sum = number1 + number2;
+    public void ToastWelcome(){
+        Toast toast = Toast.makeText(this, "Hello, Welcome back :) " ,Toast.LENGTH_LONG);
+        toast.setGravity( Gravity.TOP,-20,380);
+        toast.show();
 
-                String sumerizedstring = String.valueOf(sum);
 
-                 Intent intent = new Intent(MainActivity.this,SecondActivity.class);
-                  intent.putExtra("zuma",sum );
-                 startActivity(intent);
+    }
 
+    public void ToastSaved(){
+
+        Toast toast = Toast.makeText(MainActivity.this, "SAVED !!!", Toast.LENGTH_SHORT);
+        toast.setGravity( Gravity.BOTTOM, 26,290 );
+        toast.show();
+    }
+    public void ToastNoAmountInserted()
+    {Toast toast = Toast.makeText(MainActivity.this, "No Amount Inserted", Toast.LENGTH_SHORT);
+        toast.setGravity( Gravity.TOP, -20,380 );
+        toast.show();
 
     }
 
 
 
-    public void setupUIViews() {
+
+    public void SetupUIViews() {
         zero = (Button) findViewById(R.id.button0);
         one = (Button) findViewById(R.id.button1);
         two = (Button) findViewById(R.id.button2);
@@ -248,7 +261,7 @@ public class MainActivity extends Activity {
         mDatabaseHelper = new DataBaseHelper(this);
         num1 = (TextView) findViewById(R.id.etNum1);
         num2 = (EditText) findViewById(R.id.etNum2);
-        pay = (Button) findViewById(R.id.btnAdd);
+        PAY = (Button) findViewById(R.id.btnAdd);
         result = (TextView) findViewById(R.id.tvAnswer);
         cups = (TextView) findViewById(R.id.textView6);
         logpage = (Button) findViewById(R.id.logpage);
@@ -256,10 +269,10 @@ public class MainActivity extends Activity {
 
     }
 
-    public void AddData(int weekDayInt, Double newEntry, String dateForSql){
+    public void AddData(int weekDayInt, int weekMonth, int monthInt, Double newEntry, String dateForSql){
 
 
-            boolean insertData = mDatabaseHelper.addData(weekDayInt, newEntry , dateForSql );
+            boolean insertData = mDatabaseHelper.addData(weekDayInt, weekMonth, monthInt, newEntry , dateForSql );
 
                 if(insertData == true)  {
                         num1.setText(valueOf(result));
