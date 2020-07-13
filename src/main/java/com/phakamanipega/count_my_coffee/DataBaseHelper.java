@@ -26,7 +26,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
   String createTable =
     "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT " +
-            " , ITEM1 TEXT " + " , DATE TEXT " +" , ITEMDAY TEXT " + " , ITEMWEEK TEXT "  + " , ITEMMONTH TEXT) ";
+            " , ITEM1 TEXT " +
+            " , DATE TEXT " +
+            " , ITEMDAY TEXT " +
+            " , ITEMWEEK TEXT "  +
+            " , ITEMMONTH TEXT) ";
         db.execSQL(createTable);
 
     }
@@ -52,6 +56,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
+    //Delete item function
     public boolean deleteOne(String tobeDeleted){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = " DELETE FROM mylist_data2 " + " WHERE " + COL2 +" = '"  + tobeDeleted + "'";
@@ -87,7 +92,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor weekDayCalculation(){
+    public Cursor dayOfWeekCalculation(){
         SimpleDateFormat sdf = new SimpleDateFormat( "u" );
         int currentWeekInt = Integer.parseInt( sdf.format( new Date(  ) ) ) ;
        SQLiteDatabase db = this.getWritableDatabase();
@@ -99,16 +104,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
        return data;
     }
 
-    public Cursor weekmonthCalculation(){
+    public Cursor weekOfYearCalculation(){
         SimpleDateFormat sdf = new SimpleDateFormat( "w" );
-        int currentWeekMonth = Integer.parseInt( sdf.format( new Date ()) );
+        int currentWeekOfYear = Integer.parseInt( sdf.format( new Date ()) );
         SQLiteDatabase db = this.getWritableDatabase();
-        String Query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL6 +" = '" + currentWeekMonth +"' ";
+        String Query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL6 +" = '" + currentWeekOfYear +"' ";
         Cursor data = db.rawQuery( Query, null );
         return data;
     }
 
-    public Cursor monthCalculation(){
+    public Cursor monthOfYearCalculation(){
         SimpleDateFormat sdf = new SimpleDateFormat( "L" );
         int monthInt = Integer.parseInt(sdf.format( new Date()));
         SQLiteDatabase db = this.getWritableDatabase();

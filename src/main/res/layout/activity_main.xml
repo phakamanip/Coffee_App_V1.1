@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/coffee_calculator_vectorized"
     android:paddingTop="50dp"
-    tools:context=".MainActivity"
+    tools:context=".CalculatorActivity"
     tools:layout_editor_absoluteY="81dp">
 
 
@@ -118,19 +118,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- <LinearLayout
-        android:id="@+id/functions"
-        android:layout_width="298dp"
-        android:layout_height="93dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginStart="24dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"> -->
+
 
     <Button
         android:id="@+id/btnAdd"

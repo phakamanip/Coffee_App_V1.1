@@ -5,10 +5,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 
 public class SplashScreen extends AppCompatActivity {
@@ -20,6 +18,7 @@ public class SplashScreen extends AppCompatActivity {
     ImageView imageView;
     AnimationDrawable anim;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +28,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent homeIntent = new Intent(SplashScreen.this, MainActivity.class);
+                Intent homeIntent = new Intent(SplashScreen.this, CalculatorActivity.class);
                 startActivity(homeIntent);
                 finish();
 
