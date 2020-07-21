@@ -61,7 +61,7 @@ public class CalculatorActivity extends Activity {
                try {
                           //Assigning patterns to Date formats;
                         SimpleDateFormat MonthDayFormat = new SimpleDateFormat(" MM.dd ");
-                        SimpleDateFormat DayOfWeekFormat = new SimpleDateFormat("u");
+                        SimpleDateFormat DayOfWeekFormat = new SimpleDateFormat("D");
                         SimpleDateFormat MonthOfYearFormat = new SimpleDateFormat( "L" );
                         SimpleDateFormat WeekOfYearFormat = new SimpleDateFormat( "w" );
                         DecimalFormat DecimalFormat = new DecimalFormat("0.00 ");

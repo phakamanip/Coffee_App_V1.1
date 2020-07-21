@@ -93,7 +93,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public Cursor dayOfWeekCalculation(){
-        SimpleDateFormat sdf = new SimpleDateFormat( "u" );
+        SimpleDateFormat sdf = new SimpleDateFormat( "D" );
         int currentWeekInt = Integer.parseInt( sdf.format( new Date(  ) ) ) ;
        SQLiteDatabase db = this.getWritableDatabase();
        String Query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL4 +" = '" + currentWeekInt +"' ";

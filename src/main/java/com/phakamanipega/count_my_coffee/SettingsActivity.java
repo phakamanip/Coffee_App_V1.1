@@ -27,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         String thankyou = "Thanks for using our Coffee App Version 1. \n" +
-                "Keep checking-in here for update.    ";
+                "Keep checking-in here for updates.    ";
 
         String ContactUs_At = "Send comments and suggestions on what u want to see added in future updates to      \n" +
                 "myusefulapps1@gmail.com " ;
