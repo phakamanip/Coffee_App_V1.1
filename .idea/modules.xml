@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Count_my_coffee_July.iml" filepath="$PROJECT_DIR$/.idea/modules/Count_my_coffee_July.iml" group="Count_my_coffee_July" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Coffee_App_V1.iml" filepath="$PROJECT_DIR$/.idea/modules/Coffee_App_V1.iml" group="Coffee_App_V1" />
     </modules>
   </component>
 </project>
