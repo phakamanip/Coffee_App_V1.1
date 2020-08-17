@@ -3,6 +3,7 @@ package com.phakamanipega.count_my_coffee;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -78,9 +79,22 @@ public class CalculatorActivity extends Activity  {
             Double number1 = Double.parseDouble(num1.getText().toString()) / 100.00;
            final Double number2 = Double.parseDouble(num2.getText().toString());
            final Double sum = number1 + number2;
-
-
-                          //=======================================================================
+            num1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    String userInput = null;
+                    if (!b) {
+                        userInput = num1.getText().toString();
+                        if (TextUtils.isEmpty(userInput)) {
+                            userInput = "0.00";
+                        } else {
+                            float floatValue = Float.parseFloat(userInput);
+                            userInput = String.format("%.2f", floatValue);
+                        }
+                    }
+                    num1.setText(userInput);
+                }
+            });
 
 
          // num1.setText(" "); //clear screen
